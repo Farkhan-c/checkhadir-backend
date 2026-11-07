@@ -1,11 +1,17 @@
+import os
 import sys
-from pathlib import Path
 
-# Daftarkan root direktori dan subdirektori app ke path sistem
-BASE_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(BASE_DIR))
-sys.path.insert(0, str(BASE_DIR / "app"))
+# Dapatkan direktori saat ini
+current_dir = os.path.dirname(os.path.abspath(__file__))
 
-from app.main import app
+# Masukkan folder app ke sys.path
+app_dir = os.path.join(current_dir, "app")
+if app_dir not in sys.path:
+    sys.path.insert(0, app_dir)
+
+# Import modul secara langsung dari dalam folder app
+import main as app_module
+
+app = getattr(app_module, "app")
 
 __all__ = ["app"]
