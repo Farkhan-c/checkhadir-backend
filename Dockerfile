@@ -8,21 +8,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /workspace
+WORKDIR /app
 
-# Install dependencies terlebih dahulu
+# Salin requirements dan pasang library
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Salin seluruh isi folder proyek ke /workspace
+# Salin seluruh isi repositori (termasuk folder app) ke dalam /app
 COPY . .
 
-# Pindah working directory langsung ke dalam folder app
-WORKDIR /workspace/app
-
-ENV PYTHONPATH=/workspace:/workspace/app
+# Set PYTHONPATH agar Python menemukan app.main dari /app
+ENV PYTHONPATH=/app
 ENV PORT=8000
 
 EXPOSE 8000
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
