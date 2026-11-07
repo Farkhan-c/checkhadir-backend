@@ -72,15 +72,22 @@ app = FastAPI(
 )
 
 # Configure Cross-Origin Resource Sharing (CORS) - explicit methods/headers only
+allowed_origins = list(set(settings.CORS_ORIGINS + [
+    "https://paudlabum-checkhadir.web.app",
+    "https://paudlabum-checkhadir.firebaseapp.com",
+    "https://employee-attendance-syst-39d40.web.app",
+    "https://employee-attendance-syst-39d40.firebaseapp.com",
+    "http://localhost:5173",
+]))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
     expose_headers=["X-Total-Count"],
 )
-
 # Largest accepted request body (face samples are base64 JPEGs; 5 samples are well under this)
 MAX_REQUEST_BODY_BYTES = 12 * 1024 * 1024
 
